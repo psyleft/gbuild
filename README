@@ -1,0 +1,51 @@
+# -*- mode: org; org-make-toc-link-type-fn: org-make-toc--link-entry-github; -*-
+:PROPERTIES:
+:CREATED: [2023-04-12 Wed]
+:LAST_MODIFIED: [2023-04-13 Thu]
+:END:
+
+#+title: GBuild
+#+author: Connor Clark
+#+email: connor@psyleft.com
+
+#+html:<div align="center">
+Extensible build system written in Guile
+#+html:</div>
+
+* Table of Contents
+:PROPERTIES:
+:TOC: :include all :depth 3 :ignore this
+:END:
+
+:CONTENTS:
+- [[#introduction][Introduction]]
+- [[#design-overview][Design Overview]]
+- [[#implementation-details][Implementation Details]]
+:END:
+
+* Introduction
+
+GBuild is meant to be an extensible build system, written in Guile and inspired by GNU Guix. By extensible, I mean that the user should be able to leverage the full power of scheme to hack their build process into whatever they desire. At this time, GBuild does not necessarily aim to be particularly fast, small, fully featured, or widely compatable (though those are good qualities). Instead, the power of the build system comes from the control the user has over it. By using a record-focused declarative style inspired by Guix, the goal is to be as user-friendly as a system like Meson while also being as customizable as a project-specific build script in the hands of an advanced user.
+
+This project is currently under development, and very much incomplete. This file will be filled in with more relevant details later, but for now it serves as a short introduction to the project and a place to keep notes on its design (below).
+
+* Design Overview
+
+- Written primarly in guile scheme, maybe also C if needed
+  - Build scripts are written *ENTIRELY* in guile, similar extensible scripting-driven design philosophy as guix
+- Should come with extensive API documentation and a straightforward user interface --- powerful features come from the language, not the build system
+  - Resists bloat that comes from adding features for every possible situation, the program should have generalized design and advanced tasks are left to the user
+  - Leans more toward a script than a full build system, but should fall in between
+- Aligns with meson's design of out-of-tree build process
+  - One singular build file in each relevant directory
+    - First configure a build directory in project root
+    - Next compile that directory
+    - Finally, install to desired location
+- Avoids the autotools scenario of having ten thousand build files scattered around the project
+
+* Implementation Details
+
+- Users specify build processes through guix-style records exposed by the API
+  - Records have to be taken directly from guix source code for now, don't exists in vanilla guile or as a standalone package
+- If the user wants to add a new feature, say a compilation process, the development cycle should be the exact same as if it were being added upstream
+- Hooks are used to provide users the option to execute arbitrary scripts at various points in the build process
